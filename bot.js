@@ -218,5 +218,8 @@ client.on("messageCreate", (message) => {
   if (message.attachments.size > 0) {
     infraction(10, message.author.id, 1);
   }
+  if (message.content.includes("bingilin")) {
+    infraction(-1000, message.author.id, -1);
+  }
 });
 client.login(Login.Token);

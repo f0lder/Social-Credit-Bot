@@ -194,32 +194,34 @@ const badWords = [
   "gay",
 ];
 client.on("messageCreate", (message) => {
-  if (message.author.tag != client.user.tag && message.content) {
-    infraction(1, message.author.id, 1);
-    console.log(message.content);
-  }
-  if (message.content.includes("https")) {
-    infraction(5, message.author.id, 1);
-  }
-  if (message.content) {
-    var localPennalty = 0;
-    var LocalInfractions = 0;
-    for (var i = 0; i < badWords.length; i++) {
-      if (message.content.includes(badWords[i])) {
-        localPennalty = localPennalty + 50;
-        LocalInfractions++;
+  if (!message.member.user.bot) {
+    if (message.author.tag != client.user.tag && message.content) {
+      infraction(1, message.author.id, 1);
+      console.log(message.content);
+    }
+    if (message.content.includes("https")) {
+      infraction(5, message.author.id, 1);
+    }
+    if (message.content) {
+      var localPennalty = 0;
+      var LocalInfractions = 0;
+      for (var i = 0; i < badWords.length; i++) {
+        if (message.content.includes(badWords[i])) {
+          localPennalty = localPennalty + 50;
+          LocalInfractions++;
+        }
+      }
+      if (localPennalty && LocalInfractions) {
+        infraction(localPennalty, message.author.id, LocalInfractions);
+        console.log("Infraction on this message ", LocalInfractions);
       }
     }
-    if (localPennalty && LocalInfractions) {
-      infraction(localPennalty, message.author.id, LocalInfractions);
-      console.log("Infraction on this message ", LocalInfractions);
+    if (message.attachments.size > 0) {
+      infraction(10, message.author.id, 1);
     }
-  }
-  if (message.attachments.size > 0) {
-    infraction(10, message.author.id, 1);
-  }
-  if (message.content.includes("bingilin")) {
-    infraction(-1000, message.author.id, -1);
+    if (message.content.includes("bingilin")) {
+      infraction(-1000, message.author.id, -1);
+    }
   }
 });
 client.login(Login.Token);
